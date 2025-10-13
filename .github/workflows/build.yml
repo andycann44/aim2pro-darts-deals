@@ -1,0 +1,59 @@
+name: Build & Deploy Darts Deals
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '25 2 * * *'  # nightly
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install
+        run: npm ci || npm i
+
+      - name: Fetch PA-API (optional)
+        env:
+          PAAPI_ACCESS_KEY: ${{ secrets.PAAPI_ACCESS_KEY }}
+          PAAPI_SECRET_KEY: ${{ secrets.PAAPI_SECRET_KEY }}
+          PAAPI_PARTNER_TAG: ${{ secrets.PAAPI_PARTNER_TAG }}
+          PAAPI_HOST: ${{ secrets.PAAPI_HOST }}
+          PAAPI_REGION: ${{ secrets.PAAPI_REGION }}
+        run: |
+          node scripts/fetch_paapi.js || echo "PA-API fetch skipped/failing; continuing with seeds only."
+
+      - name: Build site
+        run: npm run build:site
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

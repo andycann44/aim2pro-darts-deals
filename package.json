@@ -1,0 +1,13 @@
+{
+  "name": "darts-affiliate-starter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:site": "node scripts/build_site.js",
+    "fetch:paapi": "node scripts/fetch_paapi.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,3 @@
+# Put one ASIN per line (no spaces). Example placeholders:
+B000XXXXXX
+B001YYYYYY
