@@ -1,0 +1,104 @@
+name: Ingest Hero Picks from Issues
+on:
+  issues:
+    types: [opened, edited, labeled, reopened]
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  add_picks:
+    if: contains(github.event.issue.labels.*.name, 'add-picks')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ensure heroes.html exists (with markers)
+        run: |
+          set -e
+          mkdir -p site/static
+          if [ ! -f site/static/heroes.html ]; then
+            cat > site/static/heroes.html <<'HTML'
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aim2Pro Darts Deals – Hero Picks</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <h1><a href="../index.html">Aim2Pro Darts Deals</a></h1>
+      <nav>
+        <a href="../index.html">Top Picks</a>
+        <a href="../deals-today.html">Deals</a>
+        <a href="./auto-deals.html">Auto Deals</a>
+        <a href="./heroes.html">Hero Picks</a>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap">
+    <p class="disclosure">As an Amazon Associate I earn from qualifying purchases.</p>
+    <h2>Hero Picks</h2>
+    <!-- ===== AUTO-INSERT START ===== -->
+    <!-- ===== AUTO-INSERT END ===== -->
+  </main>
+  <footer class="site-footer"><div class="wrap"><p>&copy; 2025 Aim2Pro Darts Deals.</p></div></footer>
+</body>
+</html>
+HTML
+          fi
+
+      - name: Insert picks from issue body
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          python3 - <<'PY'
+import os, re, io
+body = os.environ.get("ISSUE_BODY","")
+lines = [l.strip() for l in body.splitlines()]
+cards=[]
+for ln in lines:
+    if not ln or ln.startswith("#"): continue
+    m = re.match(r'(https?://\S+?)(?:\s*-\s*(.+))?$', ln)
+    if not m: continue
+    url, title = m.group(1), (m.group(2) or 'Amazon Pick')
+    cards.append(f'''<a class="card" href="{url}" target="_blank" rel="nofollow sponsored noopener">
+  <div class="card-body">
+    <h3>{title}</h3>
+    <div class="btn">View on Amazon</div>
+  </div>
+</a>''')
+path='site/static/heroes.html'
+with io.open(path,'r',encoding='utf-8') as f: html=f.read()
+start='<!-- ===== AUTO-INSERT START ===== -->'
+end  ='<!-- ===== AUTO-INSERT END ===== -->'
+if start in html and end in html:
+    pre, rest = html.split(start,1)
+    mid, post = rest.split(end,1)
+    mid = (mid.strip() + ("\n" if mid.strip() else "")) + "\n".join(cards) + "\n"
+    html = pre + start + "\n" + mid + end + post
+else:
+    html = html.replace('</main>', "\n" + "\n".join(cards) + "\n</main>")
+with io.open(path,'w',encoding='utf-8') as f: f.write(html)
+PY
+
+      - name: Commit & push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/static/heroes.html
+          git commit -m "chore: add hero picks from issue #${{ github.event.issue.number }}" || echo "No changes"
+          git push
+
+      - name: Comment + close the issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const n = context.payload.issue.number;
+            await github.rest.issues.createComment({
+              ...context.repo, issue_number: n,
+              body: "✅ Added your picks to **heroes.html** and deployed. Live: `/heroes.html`"
+            });
+            await github.rest.issues.update({ ...context.repo, issue_number: n, state: "closed" });
