@@ -4,28 +4,23 @@ on:
   push:
     branches: [ "main" ]
   schedule:
-    - cron: '25 2 * * *'
+    - cron: "35 7,19 * * *"
 permissions:
   contents: read
   pages: write
   id-token: write
 concurrency:
-  group: 'pages'
+  group: "pages"
   cancel-in-progress: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Install
-        run: npm ci || npm i
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - uses: actions/configure-pages@v5
+      - run: npm ci || npm i
       - name: Fetch PA-API (optional)
         env:
           PAAPI_ACCESS_KEY: ${{ secrets.PAAPI_ACCESS_KEY }}
@@ -37,11 +32,12 @@ jobs:
           node scripts/fetch_paapi.js || echo "PA-API fetch skipped"
       - name: Build site
         run: npm run build:site
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
-
+      - name: Copy static pages (Hero Picks)
+        run: |
+          mkdir -p dist
+          cp -f site/static/*.html dist/ || true
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: ./dist }
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -49,6 +45,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4
