@@ -1,0 +1,13 @@
+name: "Add Hero Picks"
+description: "Paste Amazon links (amzn.to or amazon.co.uk). Optional: ' - Title' after each."
+labels: ["add-picks"]
+body:
+  - textarea:
+      id: links
+      label: Links (one per line)
+      description: |
+        Example:
+        https://amzn.to/4mZFxch - Target Nathan Aspinall Gen 2 95% (23g)
+        https://www.amazon.co.uk/dp/B09XYZ1234 - Winmau Blade 6
+      validations:
+        required: true
