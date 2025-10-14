@@ -1,15 +1,14 @@
 name: Build & Deploy Darts Deals
-
 on:
   workflow_dispatch:
+  push:
+    branches: [ "main" ]
   schedule:
-    - cron: '25 2 * * *'  # nightly
-
+    - cron: '25 2 * * *'
 permissions:
   contents: read
   pages: write
   id-token: write
-
 concurrency:
   group: 'pages'
   cancel-in-progress: true
@@ -18,17 +17,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
       - name: Install
         run: npm ci || npm i
-
       - name: Fetch PA-API (optional)
         env:
           PAAPI_ACCESS_KEY: ${{ secrets.PAAPI_ACCESS_KEY }}
@@ -37,11 +34,9 @@ jobs:
           PAAPI_HOST: ${{ secrets.PAAPI_HOST }}
           PAAPI_REGION: ${{ secrets.PAAPI_REGION }}
         run: |
-          node scripts/fetch_paapi.js || echo "PA-API fetch skipped/failing; continuing with seeds only."
-
+          node scripts/fetch_paapi.js || echo "PA-API fetch skipped"
       - name: Build site
         run: npm run build:site
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
