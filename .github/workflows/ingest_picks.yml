@@ -9,17 +9,19 @@ permissions:
 
 jobs:
   add_picks:
-    if: contains(github.event.issue.labels.*.name, 'add-picks')
+    # Run if: (a) you just added the label, or (b) the issue already has it
+    if: >
+      (github.event.action == 'labeled' && github.event.label.name == 'add-picks') ||
+      contains(join(github.event.issue.labels.*.name, ','), 'add-picks')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # Create a minimal heroes.html with markers if it's missing (no heredoc!)
       - name: Ensure heroes.html exists (with markers)
         run: |
           set -e
           mkdir -p site/static
-          if [  -f site/static/heroes.html ]; then
+          if [ ! -f site/static/heroes.html ]; then
             printf '%s\n' \
 '<!doctype html>' \
 '<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Aim2Pro Darts Deals – Hero Picks</title><link rel="stylesheet" href="../style.css"></head>' \
@@ -67,7 +69,7 @@ PY
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add site/static/heroes.html
-          git commit -m "chore: add hero picks from issue #${{ github.event.issue.number }}" || echo "No changes"
+          git commit -m "add hero picks from issue #${{ github.event.issue.number }}" || echo "No changes"
           git push
 
       - name: Comment + close the issue
@@ -75,5 +77,5 @@ PY
         with:
           script: |
             const n = context.payload.issue.number;
-            await github.rest.issues.createComment({ ...context.repo, issue_number: n, body: "✅ Added your picks to **heroes.html** and deployed. Live: `/heroes.html`" });
+            await github.rest.issues.createComment({ ...context.repo, issue_number: n, body: "✅ Added picks to **heroes.html**. Live: `/heroes.html`" });
             await github.rest.issues.update({ ...context.repo, issue_number: n, state: "closed" });
