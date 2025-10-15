@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 260">
+  <rect width="420" height="260" rx="16" fill="#0f1422"/>
+  <g fill="none" stroke="#32d4a4" stroke-width="6" opacity=".9">
+    <path d="M70,200 L180,90 M180,90 l30,0 0,30 -30,0 z" />
+    <path d="M170,200 L280,90 M280,90 l30,0 0,30 -30,0 z" />
+    <path d="M270,200 L360,110 M360,110 l25,0 0,25 -25,0 z" />
+  </g>
+  <text x="210" y="235" fill="#9fb3c8" text-anchor="middle" font-family="system-ui" font-size="18">Darts</text>
+</svg>
