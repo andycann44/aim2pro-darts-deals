@@ -1,10 +1,10 @@
-name: Ingest Hero Picks
+name: Ingest Flights
 on:
   issues:
     types: [opened, edited, labeled, reopened]
 jobs:
   ingest:
-    if: contains(join(fromJson(toJson(github.event.issue.labels)).*.name, ','), 'add-picks')
+    if: contains(join(fromJson(toJson(github.event.issue.labels)).*.name, ','), 'add-flights')
     runs-on: ubuntu-latest
     permissions: { contents: write, issues: write }
     steps:
@@ -18,18 +18,16 @@ jobs:
             echo "<div class=\"auto-list-card\"><ul>"
             while IFS= read -r line; do
               [ -z "$line" ] && continue
-              URL="${line%% *}"
-              rest="${line#"$URL"}"; rest="${rest# }"
-              # If " - " exists, strip leading "-"/spaces
+              URL="${line%% *}"; rest="${line#"$URL"}"; rest="${rest# }"
               TITLE="$(echo "$rest" | sed -E 's#^(-|–)?[[:space:]]*##')"
               [ -z "$TITLE" ] && TITLE="$URL"
               echo "  <li><a href=\"$URL\" rel=\"nofollow sponsored\" target=\"_blank\">$TITLE</a></li>"
             done < body.txt
             echo "</ul></div>"
           } > block.html
-      - name: Insert into heroes.html between markers
+      - name: Insert into flights.html between markers
         run: |
-          f="site/static/heroes.html"
+          f="site/static/flights.html"
           awk -v repl="$(sed 's/[&/\]/\\&/g' block.html)" '
             BEGIN{RS=""; ORS=""}
             { if ($0 ~ /<!-- AUTO-INSERT:START -->/ && $0 ~ /<!-- AUTO-INSERT:END -->/)
@@ -40,14 +38,14 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add site/static/heroes.html
-          git commit -m "Ingest hero picks from issue #${{ github.event.issue.number }}"
+          git add site/static/flights.html
+          git commit -m "Ingest flights from issue #${{ github.event.issue.number }}"
           git push
       - name: Comment + close
         env: { GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} }
         run: |
           API="${{ github.api_url }}/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}"
           curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" \
-            -d '{"body":"✅ Picks ingested (tolerant parser) and deployed."}' "$API/comments" >/dev/null
+            -d '{"body":"✅ Flights ingested and deployed."}' "$API/comments" >/dev/null
           curl -s -X PATCH -H "Authorization: Bearer $GITHUB_TOKEN" -H "Content-Type: application/json" \
             -d '{"state":"closed"}' "$API" >/dev/null
