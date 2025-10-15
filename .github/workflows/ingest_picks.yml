@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   add_picks:
-    # Run if: (a) you just added the label, or (b) the issue already has it
+    # run when label is added OR already present
     if: >
       (github.event.action == 'labeled' && github.event.label.name == 'add-picks') ||
       contains(join(github.event.issue.labels.*.name, ','), 'add-picks')
@@ -18,6 +18,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Ensure heroes.html exists (with markers)
+        shell: bash
         run: |
           set -e
           mkdir -p site/static
@@ -69,7 +70,7 @@ PY
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add site/static/heroes.html
-          git commit -m "add hero picks from issue #${{ github.event.issue.number }}" || echo "No changes"
+          git commit -m "add hero picks from issue #${{ github.event.issue.number }}" || exit 0
           git push
 
       - name: Comment + close the issue
@@ -77,5 +78,5 @@ PY
         with:
           script: |
             const n = context.payload.issue.number;
-            await github.rest.issues.createComment({ ...context.repo, issue_number: n, body: "✅ Added picks to **heroes.html**. Live: `/heroes.html`" });
+            await github.rest.issues.createComment({ ...context.repo, issue_number: n, body: "✅ Added picks to **heroes.html**. Live: /heroes.html" });
             await github.rest.issues.update({ ...context.repo, issue_number: n, state: "closed" });
