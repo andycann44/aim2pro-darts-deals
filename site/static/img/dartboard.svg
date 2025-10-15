@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs><radialGradient id="fade" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#fff" stop-opacity=".05"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+  </radialGradient></defs>
+  <g transform="translate(300,300)">
+    <circle r="295" fill="none" stroke="#fff" stroke-opacity=".15" stroke-width="2"/>
+    <circle r="240" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="2"/>
+    <circle r="170" fill="none" stroke="#fff" stroke-opacity=".10" stroke-width="2"/>
+    <circle r="107" fill="none" stroke="#fff" stroke-opacity=".10" stroke-width="2"/>
+    <circle r="12.7" fill="#fff" fill-opacity=".18"/><circle r="6.35" fill="#fff" fill-opacity=".35"/>
+    <g stroke="#fff" stroke-opacity=".12" stroke-width="2">
+      <line x1="0" y1="-295" x2="0" y2="-170"/><line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(18)"/>
+      <line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(36)"/><line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(54)"/>
+      <line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(72)"/><line x1="0" y1="-295" x2="0" y2="-170" transform="rotate(90)"/>
+      <line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(108)"/><line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(126)"/>
+      <line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(144)"/><line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(162)"/>
+      <line x1="0" y1="-295" x2="0" y2="-170" transform="rotate(180)"/><line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(198)"/>
+      <line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(216)"/><line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(234)"/>
+      <line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(252)"/><line x1="0" y1="-295" x2="0" y2="-170" transform="rotate(270)"/>
+      <line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(288)"/><line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(306)"/>
+      <line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(324)"/><line x1="87" y1="-282" x2="50" y2="-162" transform="rotate(342)"/>
+    </g>
+    <circle r="295" fill="url(#fade)"/>
+  </g>
+</svg>
