@@ -24,6 +24,11 @@ jobs:
           mkdir -p dist
           cp -f site/static/*.html dist/ || true
           cp -f site/static/style.css dist/ || true
+      - name: List dist files
+        run: |
+          ls -la dist || true
+          echo "darts.html present?"
+          [ -f site/static/darts.html ] && echo YES || echo NO
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
