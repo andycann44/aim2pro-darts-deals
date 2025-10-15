@@ -1,19 +1,9 @@
 name: Build & Deploy Darts Deals
 on:
-  push:
-    branches:
-      - main
+  push: { branches: [ main ] }
   workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
-
+permissions: { contents: read, pages: write, id-token: write }
+concurrency: { group: pages, cancel-in-progress: true }
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,27 +12,16 @@ jobs:
       - name: Build static site
         run: |
           mkdir -p dist
-          cp -rf site/static/img dist/ || true
-          cp -rf site/static/img dist/ || true
           cp -f site/static/*.html dist/ || true
           cp -f site/static/style.css dist/ || true
-      - name: List dist files
-        run: |
-          ls -la dist || true
-          echo "darts.html present?"
-          [ -f site/static/darts.html ] && echo YES || echo NO
+          cp -rf site/static/img dist/ || true
       - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
+        with: { path: dist }
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
+    permissions: { pages: write, id-token: write }
+    environment: { name: github-pages }
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
