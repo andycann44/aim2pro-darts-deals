@@ -23,6 +23,7 @@ jobs:
         run: |
           mkdir -p dist
           cp -rf site/static/img dist/ || true
+          cp -rf site/static/img dist/ || true
           cp -f site/static/*.html dist/ || true
           cp -f site/static/style.css dist/ || true
       - name: List dist files
