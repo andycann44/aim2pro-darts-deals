@@ -1,0 +1,22 @@
+name: MiniShop (text-only boxes)
+on:
+  push:
+    paths:
+      - 'site/data/boxes.tsv'
+      - 'tools/a2p_minishop.sh'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate boxes
+        run: bash tools/a2p_minishop.sh
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/static/*.html
+          git commit -m "[minishop] regenerate boxes" || echo "No changes"
+          git push
