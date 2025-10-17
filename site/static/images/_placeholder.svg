@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#0e141b"/><stop offset="1" stop-color="#18222c"/></linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g)"/>
+  <rect x="30" y="30" width="1140" height="540" fill="none" stroke="#233143" stroke-width="6" rx="24"/>
+  <text x="50%" y="50%" fill="#8aa1b5" font-size="44" font-family="system-ui,Segoe UI,Roboto" text-anchor="middle" dominant-baseline="middle">
+    Drop cover.jpg or cover.png into this folder
+  </text>
+</svg>
