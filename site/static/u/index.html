@@ -1,3 +1,23 @@
-<!doctype html><meta charset="utf-8">
-<meta http-equiv="refresh" content="0; url=../under-10.html">
-<p>Under £10 → <a href="../under-10.html">click</a></p>
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Under £10 — Aim2Pro</title>
+<style>
+body{font-family:system-ui;margin:0;background:#0b0d10;color:#e8eef4}
+main{max-width:720px;margin:24px auto;padding:16px}
+a{color:#8bd3ff} .btn{display:inline-block;margin:8px 0;padding:10px 14px;border-radius:10px;border:1px solid #1f2831;background:#12161b;color:#e8eef4;text-decoration:none}
+.small{color:#8aa1b5;font-size:12px}
+</style>
+<main>
+  <h1>Under £10 picks</h1>
+  <p>Tap to open the list, or copy the link to share.</p>
+  <p><a class="btn" href="../under-10.html" rel="nofollow sponsored noopener">Open Under £10 →</a></p>
+  <p><button class="btn" id="copy">Copy link</button></p>
+  <p class="small" id="msg"></p>
+</main>
+<script>
+const url = location.origin + location.pathname.replace(/\/u\/?$/, "/u/");
+document.getElementById('copy').onclick = async () => {
+  try { await navigator.clipboard.writeText(url);
+        document.getElementById('msg').textContent = "Copied: " + url; }
+  catch(e){ document.getElementById('msg').textContent = "Copy failed. Long-press to select."; }
+};
+</script>
