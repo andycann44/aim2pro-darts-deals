@@ -1,0 +1,48 @@
+name: Ingest Hero Picks
+on:
+  issues:
+    types: [opened, edited, labeled, reopened]
+jobs:
+  ingest:
+    if: contains(github.event.issue.labels.*.name, 'add-picks')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ensure heroes.html with markers
+        run: |
+          mkdir -p site/static
+          file=site/static/heroes.html
+          grep -q "PASTE START" "$file" 2>/dev/null || cat >"$file" <<'HTML'
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aim2Pro Darts Deals — Heroes</title>
+<link rel="stylesheet" href="./style.css">
+</head><body><main>
+<h1>Hero picks</h1>
+<nav class="nav">
+  <a href="./under-10.html">Under £10</a>
+  <a href="./darts.html">Darts</a>
+  <a href="./boards.html">Boards</a>
+  <a href="./flights.html">Flights</a>
+  <a href="./shafts.html">Shafts</a>
+</nav>
+<!-- PASTE START -->
+<!-- PASTE END -->
+<div class="grid"></div>
+</main><footer class="footer">As an Amazon Associate I earn from qualifying purchases.</footer></body></html>
+HTML
+      - name: Append hero picks
+        env: { BODY: ${{ github.event.issue.body }} }
+        run: |
+          f=site/static/heroes.html
+          awk -v body="$BODY" '
+            /<!-- PASTE START -->/ { print; print body; seen=1; next } { print }
+            END { if (!seen){ print "<!-- PASTE START -->"; print body; print "<!-- PASTE END -->" } }
+          ' "$f" > tmp && mv tmp "$f"
+      - name: Commit & push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add site/static/heroes.html
+          git commit -m "Add hero picks from issue #${{ github.event.issue.number }}" || true
+          git push
