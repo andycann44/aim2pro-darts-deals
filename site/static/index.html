@@ -3,58 +3,78 @@
 <title>Aim2Pro Darts Deals</title>
 <link rel="stylesheet" href="./style.css">
 <script>
-function imgChain(el, next){
-  if(el.dataset.tried === "png"){ el.onerror=null; el.src="./images/_placeholder.svg"; return; }
-  if(!next){ el.dataset.tried="png"; el.src = el.src.replace("cover.jpg","cover.png"); }
+function imgChain(el){
+  if(el.dataset.tried==="png"){ el.onerror=null; el.src="./images/_placeholder.svg"; return; }
+  el.dataset.tried="png"; el.src = el.src.replace("cover.jpg","cover.png");
 }
 </script>
-<style>.btn{display:inline-block;margin:8px 8px 0 0;padding:10px 14px;border-radius:10px;border:1px solid #1f2831;background:#12161b;color:#e8eef4;text-decoration:none}</style>
 </head><body>
 <main>
   <h1>Aim2Pro Darts Deals</h1>
-  <p class="badge">Tap a box → goes straight to Amazon (affiliate links).</p>
+  <p><a class="btn" href="./under-10.html" rel="nofollow sponsored noopener">Open Under £10 →</a>
+     <button class="btn" id="copyU">Copy /u link</button></p>
+  <p class="small" id="copyMsg"></p>
 
   <div class="grid">
+    <!-- Category boxes -->
     <a class="card" href="https://www.amazon.co.uk/s?k=dartboardREPLACE_BOARDStag=aim2prodealsuk-21" target="_blank" rel="nofollow sponsored noopener">
-      <img class="thumb" src="./images/boards/cover.jpg" onerror="imgChain(this)" alt="Dartboards">
+      <img class="thumb" src="./images/boards/cover.jpg" onerror="imgChain(this)" alt="Dart Boards">
       <div class="card-body"><h2>Dart Boards</h2><p>Blade 6, Tour boards, budget options.</p></div>
     </a>
-
     <a class="card" href="https://www.amazon.co.uk/s?k=steel+tip+dartsREPLACE_DARTS10rh=p_36%3A-1000REPLACE_DARTS10tag=aim2prodealsuk-21" target="_blank" rel="nofollow sponsored noopener">
-      <img class="thumb" src="./images/darts-under-10/cover.jpg" onerror="imgChain(this)" alt="Darts under £10">
+      <img class="thumb" src="./images/darts-under-10/cover.jpg" onerror="imgChain(this)" alt="Darts ≤ £10">
       <div class="card-body"><h2>Darts ≤ £10</h2><p>Starter sets & cheap spares.</p></div>
     </a>
-
     <a class="card" href="https://www.amazon.co.uk/s?k=steel+tip+dartsREPLACE_DARTS50rh=p_36%3A0-5000REPLACE_DARTS50tag=aim2prodealsuk-21" target="_blank" rel="nofollow sponsored noopener">
-      <img class="thumb" src="./images/darts-under-50/cover.jpg" onerror="imgChain(this)" alt="Darts under £50">
+      <img class="thumb" src="./images/darts-under-50/cover.jpg" onerror="imgChain(this)" alt="Darts ≤ £50">
       <div class="card-body"><h2>Darts ≤ £50</h2><p>Solid 80–90% tungsten bargains.</p></div>
     </a>
-
     <a class="card" href="https://www.amazon.co.uk/s?k=dart+flightsREPLACE_FLIGHTStag=aim2prodealsuk-21" target="_blank" rel="nofollow sponsored noopener">
       <img class="thumb" src="./images/flights/cover.jpg" onerror="imgChain(this)" alt="Flights">
       <div class="card-body"><h2>Flights</h2><p>Standard, slim, big multipacks.</p></div>
     </a>
-
     <a class="card" href="https://www.amazon.co.uk/s?k=dart+shaftsREPLACE_SHAFTStag=aim2prodealsuk-21" target="_blank" rel="nofollow sponsored noopener">
       <img class="thumb" src="./images/shafts/cover.jpg" onerror="imgChain(this)" alt="Shafts">
       <div class="card-body"><h2>Shafts</h2><p>Nylon, aluminium, carbon, rings.</p></div>
     </a>
-
     <a class="card" href="https://www.amazon.co.uk/s?k=dart+mat+ocheREPLACE_MATStag=aim2prodealsuk-21" target="_blank" rel="nofollow sponsored noopener">
       <img class="thumb" src="./images/mats/cover.jpg" onerror="imgChain(this)" alt="Mats & Oche">
       <div class="card-body"><h2>Mats & Oche</h2><p>Mark your throw line.</p></div>
     </a>
-
     <a class="card" href="https://www.amazon.co.uk/s?k=dartboard+surroundREPLACE_SURROUNDStag=aim2prodealsuk-21" target="_blank" rel="nofollow sponsored noopener">
       <img class="thumb" src="./images/surrounds/cover.jpg" onerror="imgChain(this)" alt="Surrounds">
       <div class="card-body"><h2>Surrounds</h2><p>Protect your wall and frame your board.</p></div>
     </a>
-
     <a class="card" href="./heroes.html">
       <img class="thumb" src="./images/heroes/cover.jpg" onerror="imgChain(this)" alt="Hero picks">
-      <div class="card-body"><h2>Hero Picks</h2><p>Manually added favourites & deals.</p></div>
+      <div class="card-body"><h2>Hero Picks</h2><p>Hand-picked favourites & deals.</p></div>
+    </a>
+
+    <!-- Brand boxes -->
+    <a class="card" href="https://www.amazon.co.uk/s?k=target+darts+steel+tipREPLACE_TARGETtag=aim2prodealsuk-21" target="_blank" rel="nofollow sponsored noopener">
+      <img class="thumb" src="./images/brand-target/cover.jpg" onerror="imgChain(this)" alt="Target">
+      <div class="card-body"><h2>Target</h2><p>Popular steel-tip ranges & player sets.</p></div>
+    </a>
+    <a class="card" href="https://www.amazon.co.uk/s?k=winmau+darts+steel+tipREPLACE_WINMAUtag=aim2prodealsuk-21" target="_blank" rel="nofollow sponsored noopener">
+      <img class="thumb" src="./images/brand-winmau/cover.jpg" onerror="imgChain(this)" alt="Winmau">
+      <div class="card-body"><h2>Winmau</h2><p>Blade heritage & pro-level darts.</p></div>
+    </a>
+    <a class="card" href="https://www.amazon.co.uk/s?k=unicorn+darts+steel+tipREPLACE_UNICORNtag=aim2prodealsuk-21" target="_blank" rel="nofollow sponsored noopener">
+      <img class="thumb" src="./images/brand-unicorn/cover.jpg" onerror="imgChain(this)" alt="Unicorn">
+      <div class="card-body"><h2>Unicorn</h2><p>Classic designs & value picks.</p></div>
     </a>
   </div>
 </main>
 <footer>As an Amazon Associate I earn from qualifying purchases. Prices/availability may change.</footer>
+<script>
+(function(){
+  var u = location.origin + location.pathname.replace(/\/$/, "") + "/u/";
+  var btn = document.getElementById('copyU');
+  var msg = document.getElementById('copyMsg');
+  if(btn) btn.onclick = async function(){
+    try { await navigator.clipboard.writeText(u); msg.textContent = "Copied: " + u; }
+    catch(e){ msg.textContent = "Copy failed. Long-press to select."; }
+  };
+})();
+</script>
 </body></html>
